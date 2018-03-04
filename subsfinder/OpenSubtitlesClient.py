@@ -3,6 +3,8 @@
 import sys
 import collections
 
+from subsfinder import utils
+
 # FIXME: move somewhere else
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -57,8 +59,14 @@ class OpenSubtitlesClient:
 
         moviehash = utils.hash_file(filepath)
 
-        request_data = [{ 'moviehash': moviehash, 'sublanguageid': sublanguageid}]
+        request_data = [{ 'moviehash': moviehash, 'sublanguageid': language}]
 
-        response = self.xmlrpc.SearchSubtitles(self.token, request_data)
+        response = self.xmlrpc.SearchSubtitles(self.token, request_data, {'limit': 10})
 
-        return response
+        return response.get('data', [])
+
+    def download_subtitle(self, id_subtitle_file):
+
+        response = self.xmlrpc.DownloadSubtitles(self.token, [id_subtitle_file])
+
+        return response.get('data', [])
