@@ -50,7 +50,7 @@ class OpenSubtitlesClient:
         response = self.xmlrpc.GetSubLanguages()
 
         data = response.get('data')
-        languages = {lang.get('ISO639'): lang.get('LanguageName') for lang in data}
+        languages = {lang.get('SubLanguageID'): lang.get('LanguageName') for lang in data}
         od = collections.OrderedDict(sorted(languages.items()))
 
         return od

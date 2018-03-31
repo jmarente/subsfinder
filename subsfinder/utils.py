@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 import struct, os
+import StringIO
+import gzip
+import base64
 
 def hash_file(filepath):
     try:
@@ -36,3 +39,33 @@ def hash_file(filepath):
 
     except(IOError):
         return "IOError"
+
+def get_subtitle_path(filepath):
+    abspath = os.path.abspath(filepath)
+    filename, file_extension = os.path.splitext(abspath)
+    path = os.path.dirname(filename)
+
+    sufix = 0
+    tmp_sub_path = filename + '.srt'
+    sub_path = None
+    while not sub_path:
+        if not os.path.isfile(tmp_sub_path):
+            sub_path = tmp_sub_path
+        else:
+            sufix += 1
+            tmp_sub_path = '{}-{}.srt'.format(filename, sufix)
+
+    return sub_path
+
+def decompress_and_save(sub_path, data):
+
+    gzip_file_content = base64.b64decode(data)
+
+    compressedFile = StringIO.StringIO()
+    compressedFile.write(gzip_file_content)
+    compressedFile.seek(0)
+
+    decompressedFile = gzip.GzipFile(fileobj=compressedFile, mode='rb')
+
+    with open(sub_path, 'w') as outfile:
+        outfile.write(decompressedFile.read())
