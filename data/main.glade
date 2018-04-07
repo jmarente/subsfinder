@@ -2,34 +2,58 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkListStore" id="subtitles_result">
+  <object class="GtkListStore" id="languages_list">
+    <columns>
+      <!-- column-name lang_id -->
+      <column type="gchararray"/>
+      <!-- column-name lang_name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="subtitles_result_list">
     <columns>
       <!-- column-name results -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow">
+  <object class="GtkFileFilter" id="video_filter">
+    <mime-types>
+      <mime-type>video/x-msvideo</mime-type>
+      <mime-type>video/mpeg</mime-type>
+      <mime-type>video/ogg</mime-type>
+      <mime-type>video/webm</mime-type>
+      <mime-type>video/3gpp</mime-type>
+    </mime-types>
+    <patterns>
+      <pattern>*.mp4</pattern>
+      <pattern>*.mkv</pattern>
+      <pattern>*.avi</pattern>
+      <pattern>*.mpg</pattern>
+      <pattern>*.mpeg</pattern>
+    </patterns>
+  </object>
+  <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
-    <property name="margin_left">5</property>
-    <property name="margin_right">5</property>
     <property name="title" translatable="yes">Subsfinder</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <property name="destroy_with_parent">True</property>
+    <signal name="destroy" handler="on_destroy" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">5</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkFileChooserButton">
+              <object class="GtkFileChooserButton" id="file_selector">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="filter">video_filter</property>
                 <property name="title" translatable="yes">Select a file</property>
               </object>
               <packing>
@@ -57,14 +81,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText">
+                  <object class="GtkComboBox" id="languages_combobox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="model">languages_list</property>
+                    <property name="active">0</property>
+                    <property name="id_column">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="padding">7</property>
+                    <property name="padding">5</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -83,10 +110,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView">
+          <object class="GtkTreeView" id="results_treeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="model">subtitles_result</property>
+            <property name="model">subtitles_result_list</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
@@ -103,10 +130,18 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkLabel" id="status_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="cancel_btn">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -120,7 +155,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="download_btn">
                 <property name="label" translatable="yes">Download</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -134,7 +169,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="search_btn">
                 <property name="label" translatable="yes">Search</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -151,7 +186,6 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="padding">5</property>
             <property name="position">2</property>
           </packing>
         </child>

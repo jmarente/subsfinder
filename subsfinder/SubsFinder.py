@@ -27,9 +27,17 @@ class SubsFinder:
         language_parser = subparsers.add_parser('languages', help='Show avaible languages')
         language_parser.set_defaults(func=self.languages)
 
+        gui_parser = subparsers.add_parser('gui', help='Start subsfinder gui')
+        gui_parser.set_defaults(func=self.gui)
+
         args = parser.parse_args()
 
         args.func(args)
+
+    def gui(self, args):
+        from subsfinder.gui.MainGui import MainGui
+        main_gui = MainGui()
+        main_gui.show()
 
     def languages(self, args):
         languages = self.os_client.get_languages()
