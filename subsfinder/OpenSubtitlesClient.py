@@ -4,6 +4,7 @@ import sys
 import collections
 
 from subsfinder import utils
+from subsfinder.FunctionCache import FunctionCache
 
 # FIXME: move somewhere else
 PY2 = sys.version_info[0] == 2
@@ -45,6 +46,7 @@ class OpenSubtitlesClient:
             self.login()
         return self._token
 
+    @FunctionCache()
     def get_languages(self):
 
         response = self.xmlrpc.GetSubLanguages()

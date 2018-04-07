@@ -2,8 +2,10 @@
 # -*- encoding: utf-8 -*-
 
 from subsfinder.SubsFinder import SubsFinder
+from subsfinder.Config import config
 
 def main():
+    config.initialize()
     subsFinder = SubsFinder()
     subsFinder.start_cli()
 
