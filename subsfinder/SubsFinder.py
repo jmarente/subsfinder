@@ -31,7 +31,12 @@ class SubsFinder:
         gui_parser = subparsers.add_parser('gui', help='Start subsfinder gui')
         gui_parser.set_defaults(func=self.gui)
 
-        args = parser.parse_args()
+        # Set download as default parser
+        input_args = sys.argv[1:]
+        if len(input_args) and not input_args[0] in ['download', 'languages', 'gui']:
+            input_args = ['download'] + input_args
+
+        args = parser.parse_args(input_args)
 
         args.func(args)
 
