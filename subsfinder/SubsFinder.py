@@ -41,10 +41,29 @@ class SubsFinder:
 
     def languages(self, args):
         languages = self.os_client.get_languages()
-        # col_width = max(len(lang_name) for lang_id, lang_name in languages.items() ) + 2  # padding
-        # print col_width
-        # print "".join([lang_name.ljust(col_width) for lang_id, lang_name in languages.items()])
-        print "".join('{} ({}){}'.format(lang_name, lang_id, os.linesep) for lang_id, lang_name in languages.items())
+        formated_languages = []
+
+        max_width = 0
+        columns = 3
+        row_printed_columns = 0
+
+        for lang_id, lang_name in languages.items():
+            formated = '{} ({})'.format(lang_name, lang_id)
+            max_width = len(formated) if len(formated) > max_width else max_width
+
+            formated_languages.append(formated)
+            row_printed_columns += 1
+
+            if row_printed_columns % columns == 0:
+                formated_languages.append(os.linesep)
+
+        output = ''
+        for language in formated_languages:
+            output += language.ljust(max_width) if language != os.linesep else language
+
+        print output
+
+        # print "".join('{} ({}){}'.format(lang_name, lang_id, os.linesep) for lang_id, lang_name in languages.items())
 
     def download(self, args):
 
