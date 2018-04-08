@@ -46,7 +46,8 @@ class OpenSubtitlesClient:
             self.login()
         return self._token
 
-    @FunctionCache()
+    #Cache for one month
+    @FunctionCache(60*60*24*30)
     def get_languages(self):
 
         response = self.xmlrpc.GetSubLanguages()

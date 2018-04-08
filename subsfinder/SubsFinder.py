@@ -20,7 +20,8 @@ class SubsFinder:
 
         download_parser = subparsers.add_parser('download', help='Download subtitles for a giving video file')
         download_parser.add_argument('filepath', type=str, help='filepath to search subtitles')
-        download_parser.add_argument('-l', '--language', dest='language', type=str, default='eng',
+        download_parser.add_argument('-l', '--language', dest='language', default='eng',
+                            type=self.check_valid_language,
                             help='subtitles language, default "eng". Use languages command to get all languages')
         download_parser.set_defaults(func=self.download)
 
@@ -110,3 +111,9 @@ class SubsFinder:
         utils.decompress_and_save(sub_path, data[0]['data'])
 
         print('Subtitle successfully saved at {}'.format(sub_path))
+
+    def check_valid_language(self, value):
+        languages = self.os_client.get_languages()
+        if not value in languages:
+            raise argparse.ArgumentTypeError("%s is an invalid language value, use «languages» command to list available languages" % value)
+        return value
