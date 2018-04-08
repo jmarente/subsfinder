@@ -14,6 +14,8 @@
     <columns>
       <!-- column-name results -->
       <column type="gchararray"/>
+      <!-- column-name subtitle_id -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkFileFilter" id="video_filter">
@@ -35,8 +37,8 @@
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Subsfinder</property>
-    <property name="default_width">800</property>
-    <property name="default_height">600</property>
+    <property name="default_width">450</property>
+    <property name="default_height">300</property>
     <property name="destroy_with_parent">True</property>
     <signal name="destroy" handler="on_destroy" swapped="no"/>
     <child>
@@ -55,6 +57,7 @@
                 <property name="can_focus">False</property>
                 <property name="filter">video_filter</property>
                 <property name="title" translatable="yes">Select a file</property>
+                <signal name="file-set" handler="on_file_set" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -114,6 +117,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="model">subtitles_result_list</property>
+            <signal name="cursor-changed" handler="on_results_treeview_select_cursor_row" swapped="no"/>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
@@ -133,6 +137,7 @@
               <object class="GtkLabel" id="status_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Please, select a file</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -160,6 +165,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_download_btn_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -174,6 +180,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_search_btn_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
